@@ -26,7 +26,7 @@ Thanks and good luck!
 4. Build out the server routes described below.
 - [x] make sure routes are working
 - [x] get treats
-- [ ] post treats
+- [x] post treats
 5. Once you are complete, check your work into a new repo and post it on GitHub. Submit this link with your assignment.
 
 ## Database

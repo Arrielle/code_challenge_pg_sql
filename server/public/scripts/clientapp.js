@@ -5,6 +5,8 @@ $(document).ready(function () {
 
   deleteTreat();
 
+  updateTreat();
+
   /**---------- Event Handling ----------**/
   /** Save New Treat **/
   $('#saveNewButton').on('click', function(event) {
@@ -39,7 +41,6 @@ $(document).ready(function () {
       });
     });
   }
-
   // POST /treats
   function postTreat(treat) {
     $.ajax({
@@ -53,27 +54,49 @@ $(document).ready(function () {
       getTreats();
     });
   }
-
   //DELETE /treats
   function deleteTreat(){
-  $('#treat-display').on('click', '.deleteButton', function(){
-    console.log('delete button clicked');
-    var treatIDDelete = $(this).parent().data().id;
-    // .parent().parent().data().id;
-    console.log(treatIDDelete);
+    $('#treat-display').on('click', '.deleteButton', function(){
+      console.log('delete button clicked');
+      var treatIDDelete = $(this).parent().data().id;
+      // .parent().parent().data().id;
+      console.log(treatIDDelete);
+      $.ajax({
+        type: 'DELETE',
+        url: '/treats/delete/' + treatIDDelete,
+        success: function(response){
+          console.log(response);
+          clearDom();
+          getTreats();
+        }
+      });//ends ajax
+    });//ends onclick
+  }//ends delete treat function
+  //UPDATE /treats
+  function updateTreat(){
+    $('#treat-display').on('click', '.updateButton', function(){
+    var treatIDSave = $(this).parent().data().id;
+    //create objectToSave
+    var descriptionOfTreat = $(this).parent().find('.treatDescription').val();
+    var nameOfTreat = $(this).parent().find('.treatName').val();
+    console.log(nameOfTreat);
+    var objectToSave = {
+      name: nameOfTreat,
+      description: descriptionOfTreat
+    }
+    // call ajax request
     $.ajax({
-      type: 'DELETE',
-      url: '/treats/delete/' + treatIDDelete,
+      type: 'PUT', //it's the PG update PUT or PATCH
+      url: '/treats/save/' + treatIDSave,
+      data: objectToSave,// books/delete/48 (where 48 is bookIDDelete)
       success: function(response){
         console.log(response);
         clearDom();
-
         getTreats();
-      }
+      }//ends success
     });//ends ajax
   });//ends onclick
-}//ends delete treat function
-
+  }//ends update function
   /** ---------- DOM Functions ----------**/
 
   function clearDom() {
@@ -94,22 +117,22 @@ $(document).ready(function () {
     }
 
     var $treat = $('<div class="six columns individual-treat" data-id ="' + treat.id + '">' +
-                  '<div class="image-wrap">' +
-                  '<img src="' + treat.pic + '" class="u-max-full-width" />' +
-                  '<div class="toggle row">' +
-                  '<div class="six columns">' +
-                  '<button class="edit u-full-width">Edit</button>' +
-                  '</div>' +
-                  '<div class="six columns">' +
-                  '<button class="delete u-full-width">Delete</button>' +
-                  '</div>' +
-                  '</div>' +
-                  '</div>' +
-                  '<h3>' + treat.name + '</h3>' +
-                  '<p>' + treat.description + '</p>' +
-                  '<button class ="updateButton">Update</button>' +
-                  '<button class = "deleteButton">Delete</button>' +
-                  '</div>');
+    '<div class="image-wrap">' +
+    '<img src="' + treat.pic + '" class="u-max-full-width" />' +
+    '<div class="toggle row">' +
+    '<div class="six columns">' +
+    '<button class="edit u-full-width">Edit</button>' +
+    '</div>' +
+    '<div class="six columns">' +
+    '<button class="delete u-full-width">Delete</button>' +
+    '</div>' +
+    '</div>' +
+    '</div>' +
+    '<h3><input value="' + treat.name + '" class="treatName"></h3>' +
+    '<p><input type="textarea" value="' + treat.description + '" class="treatDescription"></p><br>' +
+    '<button class ="updateButton">Update</button>' +
+    '<button class = "deleteButton">Delete</button>' +
+    '</div>');
 
     $treat.data('id', treat.id);
 

@@ -75,4 +75,29 @@ router.delete('/delete/:id', function(req, res){
   });//ends pool connect
 });//ends delete router
 
+router.put('/save/:id', function(req, res){
+  var treatID = req.params.id; //finds the optional parameter
+  var treatObject = req.body;
+  console.log('book id to save: ', treatID);
+
+  pool.connect(function(err, client, done){
+    if(err) {
+      console.log('Error connecting to database: ', err);
+      res.sendStatus(500);
+    } else {
+      client.query('UPDATE treats SET name=$1, description=$2 WHERE id=$3;',
+      [treatObject.name, treatObject.description, treatID], //PARAM 2 variable that we're adding to the PG query (Replaces $1 in the query)
+      function(err, result){ //PARAM 3 the function that is run after the query takes place
+        done();
+        if(err) {
+          console.log('no edition?', err);
+          res.sendStatus(500);
+        } else {
+          res.sendStatus(200);
+        }//ends client.query function
+      });//ends client.query
+    } //ends ppol connect function
+  });//ends pool connect
+});//ends save router
+
 module.exports = router;
