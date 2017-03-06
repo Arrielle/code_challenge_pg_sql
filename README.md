@@ -25,7 +25,7 @@ Thanks and good luck!
 - [x] Keep syntax in sql file
 4. Build out the server routes described below.
 - [x] make sure routes are working
-- [ ] get treats
+- [x] get treats
 - [ ] post treats
 5. Once you are complete, check your work into a new repo and post it on GitHub. Submit this link with your assignment.
 

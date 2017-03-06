@@ -30,4 +30,25 @@ router.get('/', function(req,res){
   });
 });// ends get
 
+router.post('/', function(req,res){
+  console.log('here is the body? -> ', req.body);
+  var treatObject = req.body;
+  pool.connect(function(err, client, done){
+    if(err){
+      console.log('error connecting to pool')
+      res.sendStatus(500);
+    } else {
+      client.query('INSERT INTO treats (name, description, pic) VALUES ($1, $2, $3);', [treatObject.name, treatObject.description, treatObject.url], function(){
+        done();
+        if(err){
+          console.log('error inserting into treats');
+          res.sendStatus(500);
+        } else{
+          res.sendStatus(201);
+        }
+      });//end client query
+    } //end else
+  });
+});
+
 module.exports = router;
