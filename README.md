@@ -14,15 +14,23 @@ Thanks and good luck!
 ## Instructions
 
 1. Fork and clone this repository.
+- [x] Fork
+- [x] Clone
 2. Run `npm install` **The package.json file does NOT include all the npm modules you will need.**
+- [x] npm install
 2. You will not need to change the client side code (HTML, CSS, nor JavaScript);
+- [x] DON'T TOUCH THESE FILES!
 3. Design and create the database. Be sure to commit the create table syntax in the `create_database.sql` file.
+- [ ] Create database
+- [ ] Keep syntax in sql file
 4. Build out the server routes described below.
 5. Once you are complete, check your work into a new repo and post it on GitHub. Submit this link with your assignment.
 
 ## Database
 
 Create a `treats` table with the following columns:
+
+
 
 * `id` (this will be your primary key)
 * `name` (short string)
