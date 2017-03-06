@@ -3,6 +3,8 @@ $(document).ready(function () {
   // get treats on load
   getTreats();
 
+  deleteTreat();
+
   /**---------- Event Handling ----------**/
   /** Save New Treat **/
   $('#saveNewButton').on('click', function(event) {
@@ -52,6 +54,26 @@ $(document).ready(function () {
     });
   }
 
+  //DELETE /treats
+  function deleteTreat(){
+  $('#treat-display').on('click', '.deleteButton', function(){
+    console.log('delete button clicked');
+    var treatIDDelete = $(this).parent().data().id;
+    // .parent().parent().data().id;
+    console.log(treatIDDelete);
+    $.ajax({
+      type: 'DELETE',
+      url: '/treats/delete/' + treatIDDelete,
+      success: function(response){
+        console.log(response);
+        clearDom();
+
+        getTreats();
+      }
+    });//ends ajax
+  });//ends onclick
+}//ends delete treat function
+
   /** ---------- DOM Functions ----------**/
 
   function clearDom() {
@@ -71,7 +93,7 @@ $(document).ready(function () {
       $treats.append('<div class="treat row"></div>');
     }
 
-    var $treat = $('<div class="six columns individual-treat">' +
+    var $treat = $('<div class="six columns individual-treat" data-id ="' + treat.id + '">' +
                   '<div class="image-wrap">' +
                   '<img src="' + treat.pic + '" class="u-max-full-width" />' +
                   '<div class="toggle row">' +
@@ -85,6 +107,8 @@ $(document).ready(function () {
                   '</div>' +
                   '<h3>' + treat.name + '</h3>' +
                   '<p>' + treat.description + '</p>' +
+                  '<button class ="updateButton">Update</button>' +
+                  '<button class = "deleteButton">Delete</button>' +
                   '</div>');
 
     $treat.data('id', treat.id);

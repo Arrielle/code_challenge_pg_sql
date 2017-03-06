@@ -51,4 +51,28 @@ router.post('/', function(req,res){
   });
 });
 
+router.delete('/delete/:id', function(req, res){
+  var treatID = req.params.id;
+  console.log('treat id to delete: ', treatID);
+  pool.connect(function(err, client, done){
+    if(err) {
+      // There was an error connecting to the database
+      res.sendStatus(500);
+    } else {
+      // We connected to the database!!!
+      // Now, we're gonna' git stuff!!!!!
+      client.query('DELETE FROM treats WHERE id=$1;', //PARAM 1 $1 tells PG that we're looking for a variable
+      [treatID], //PARAM 2 variable that we're adding to the PG query (Replaces $1 in the query)
+      function(err, result){ //PARAM 3 the function that is run after the query takes place
+        done();
+        if(err) {
+          res.sendStatus(500);
+        } else {
+          res.sendStatus(201);
+        }//ends client.query function
+      });//ends client.query
+    } //ends ppol connect function
+  });//ends pool connect
+});//ends delete router
+
 module.exports = router;
