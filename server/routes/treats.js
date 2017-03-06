@@ -11,27 +11,23 @@ var pool = new pg.Pool(config);
 // get all treats
 router.get('/', function(req,res){
   console.log('Did I hit my get treats route?');
-  //connect to the database
-  // pool.connect(function(err, client, done){ //error - if can't connect, client, done - what to do when done
-  //   if(err){
-  //     res.sendStatus(500);
-  //   } else {
-  //     //select all tasks
-  //     //SELECT * from task;
-  //     client.query('SELECT * from task;', function(err, result){ //error if query errors out
-  //       done();
-  //       if(err){
-  //         console.log(err);
-  //         res.sendStatus(500);
-  //       } else {
-  //       // console.log(result); //taking a look at the differences
-  //       console.log(result.rows);
-  //       res.status(200).send(result.rows);
-  //     }
-  //     });
-  //   }
-  // });
-  res.sendStatus(200); // don't set two send status!! Otherwise can't send headers twice
+  pool.connect(function(err, client, done){ //error - if can't connect, client, done - what to do when done
+    if(err){
+      res.sendStatus(500);
+    } else {
+      client.query('SELECT * from treats;', function(err, result){ //error if query errors out
+        done();
+        if(err){
+          console.log(err);
+          res.sendStatus(500);
+        } else {
+        // console.log(result); //taking a look at the differences
+        console.log(result.rows);
+        res.status(200).send(result.rows);
+      }
+      });
+    }
+  });
 });// ends get
 
 module.exports = router;
